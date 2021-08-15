@@ -1,0 +1,15 @@
+{
+	"name": "youtube",
+	"fullName": "L.U.M.E.N. youtube module",
+	"author": "Elanis",
+	"version": "1.0.0",
+	"dependencies": {},
+	"desktop": {
+		"module": true,
+		"window": false
+	},
+	"mobile": {
+		"module": false,
+		"window": false
+	}
+}
