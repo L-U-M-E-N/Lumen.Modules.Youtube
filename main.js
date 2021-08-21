@@ -67,11 +67,14 @@ async function getPlayListData(playlistId) {
 	return finalResult;
 }
 
+let videoCount = 0;
+let totalDuration = { hours: 0, minutes: 0, seconds: 0 };
+
 (async() => {
 	const playlistData = await getPlayListData(PLAYLIST_ID, 0);
 
 	console.log('Video count: ', playlistData.length);
-	const totalDuration = playlistData.reduce((acc, item) => {
+	totalDuration = playlistData.reduce((acc, item) => {
 		const duration = parseISO8601Duration(item.videoData.contentDetails.duration);
 
 		acc.hours += duration.days * 24;
@@ -92,4 +95,13 @@ async function getPlayListData(playlistId) {
 		return acc;
 	}, { hours: 0, minutes: 0, seconds: 0 });
 	console.log('Total duration: ', totalDuration.hours.toString().padStart(2, '0') + ':' + totalDuration.minutes.toString().padStart(2, '0') + ':' + totalDuration.seconds.toString().padStart(2, '0'));
+
+	videoCount = playlistData.length;
 })();
+
+ipcMain.handle('youtube-getVideoCount', () => {
+	return videoCount;
+});
+ipcMain.handle('youtube-getDuration', () => {
+	return totalDuration;
+});
