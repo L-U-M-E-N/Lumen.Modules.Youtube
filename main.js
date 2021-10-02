@@ -1,8 +1,8 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
-const fs = require('fs');
+import fs from 'fs';
 
-const YoutubeInternal = require('./YoutubeInternal.js');
+import YoutubeInternal from './YoutubeInternal.js';
 
 const PLAYLIST_ID = '';
 const API_KEY = '';

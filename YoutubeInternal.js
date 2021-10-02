@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 const iso8601DurationRegex = /(-)?P(?:([.,\d]+)Y)?(?:([.,\d]+)M)?(?:([.,\d]+)W)?(?:([.,\d]+)D)?T(?:([.,\d]+)H)?(?:([.,\d]+)M)?(?:([.,\d]+)S)?/;
 function parseISO8601Duration(iso8601Duration) {
@@ -16,7 +16,7 @@ function parseISO8601Duration(iso8601Duration) {
 	};
 }
 
-module.exports = class YoutubeInternal {
+export default class YoutubeInternal {
 	static async getVideoData(videoId, API_KEY) {
 		const res = await fetch(
 			`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}`

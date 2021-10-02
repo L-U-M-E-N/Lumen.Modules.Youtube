@@ -1,10 +1,9 @@
-const YoutubeInternal = require('./YoutubeInternal');
+import YoutubeInternal from './YoutubeInternal.js';
 
-module.exports = class Youtube {
+export default class Youtube {
 	static init() {
 		Youtube.update();
 
-		clearInterval(Youtube.interval);
 		Youtube.interval = setInterval(Youtube.update, 60 * 60 * 1000); // Update every hour
 	}
 
@@ -31,4 +30,4 @@ module.exports = class Youtube {
 
 		log('Saved current Youtube playlist status', 'info');
 	}
-};
+}

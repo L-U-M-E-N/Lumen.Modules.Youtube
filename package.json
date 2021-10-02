@@ -2,7 +2,8 @@
   "name": "lumen-module-youtube",
   "version": "1.0.0",
   "description": "Youtube Module",
-  "main": "main.js",
+  "exports": "./main.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
