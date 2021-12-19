@@ -17,13 +17,15 @@ export default class Youtube {
 			videoCount
 		} = await YoutubeInternal.processPlaylistForModule(youtubeCfg.PLAYLIST_ID, youtubeCfg.API_KEY);
 
-		if(totalDuration === Youtube.prevTotalDuration && Youtube.prevVideoCount === videoCount) {
+		const duration = totalDuration.hours * 3600 + totalDuration.minutes * 60 + totalDuration.seconds;
+
+		if(duration === Youtube.prevTotalDuration && Youtube.prevVideoCount === videoCount) {
 			return;
 		}
 
 		const [query, values] = Database.buildInsertQuery('yt_stats', {
 			date: new Date(),
-			duration: totalDuration.hours * 3600 + totalDuration.minutes * 60 + totalDuration.seconds,
+			duration,
 			amount: videoCount
 		});
 
@@ -32,7 +34,7 @@ export default class Youtube {
 			values
 		);
 
-		Youtube.prevTotalDuration = totalDuration;
+		Youtube.prevTotalDuration = duration;
 		Youtube.prevVideoCount = videoCount;
 
 		log('Saved current Youtube playlist status', 'info');
