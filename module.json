@@ -11,5 +11,9 @@
 	"mobile": {
 		"module": false,
 		"window": false
-	}
+	},
+    "config": {
+        "API_KEY": "string",
+        "PLAYLIST_ID": "string"
+    }
 }

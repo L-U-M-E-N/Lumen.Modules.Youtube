@@ -68,6 +68,10 @@ export default class YoutubeInternal {
 		let videoCount = 0;
 		let totalDuration = { hours: 0, minutes: 0, seconds: 0 };
 
+		if(!PLAYLIST_ID || PLAYLIST_ID === '' || !API_KEY || API_KEY === '') {
+			return;
+		}
+
 		const playlistData = await YoutubeInternal.getPlayListData(PLAYLIST_ID, API_KEY);
 
 		console.log('Video count: ', playlistData.length);

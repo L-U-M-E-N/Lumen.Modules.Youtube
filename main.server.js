@@ -12,11 +12,14 @@ export default class Youtube {
 	}
 
 	static async update() {
+		const content = await YoutubeInternal.processPlaylistForModule(youtubeCfg.PLAYLIST_ID, youtubeCfg.API_KEY);
+
+		if(!content) { return; }
+
 		const {
 			totalDuration,
 			videoCount
-		} = await YoutubeInternal.processPlaylistForModule(youtubeCfg.PLAYLIST_ID, youtubeCfg.API_KEY);
-
+		} = content;
 		const duration = totalDuration.hours * 3600 + totalDuration.minutes * 60 + totalDuration.seconds;
 
 		if(duration === Youtube.prevTotalDuration && Youtube.prevVideoCount === videoCount) {
