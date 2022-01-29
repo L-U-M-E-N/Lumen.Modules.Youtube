@@ -79,12 +79,12 @@ export default class YoutubeInternal {
 			acc.minutes += duration.minutes;
 			acc.seconds += duration.seconds;
 
-			while(acc.seconds > 60) {
+			while(acc.seconds >= 60) {
 				acc.seconds -= 60;
 				acc.minutes++;
 			}
 
-			while(acc.minutes > 60) {
+			while(acc.minutes >= 60) {
 				acc.minutes -= 60;
 				acc.hours++;
 			}
