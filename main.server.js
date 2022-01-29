@@ -12,7 +12,7 @@ export default class Youtube {
 	}
 
 	static async update() {
-		const content = await YoutubeInternal.processPlaylistForModule(youtubeCfg.PLAYLIST_ID, youtubeCfg.API_KEY);
+		const content = await YoutubeInternal.processPlaylistForModule(global.config.youtube.PLAYLIST_ID, global.config.youtube.API_KEY);
 
 		if(!content) { return; }
 
