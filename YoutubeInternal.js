@@ -76,6 +76,11 @@ export default class YoutubeInternal {
 
 		console.log('Video count: ', playlistData.length);
 		totalDuration = playlistData.reduce((acc, item) => {
+			if(item.snippet.title === 'Deleted video') {
+				console.log(`Warning: video ${item.snippet.resourceId.videoId} has been deleted from youtube`);
+				return acc;
+			}
+
 			const duration = parseISO8601Duration(item.videoData.contentDetails.duration);
 
 			acc.hours += duration.days * 24;
@@ -93,12 +98,12 @@ export default class YoutubeInternal {
 				acc.hours++;
 			}
 
+			videoCount++;
+
 			return acc;
 		}, { hours: 0, minutes: 0, seconds: 0 });
 		console.log('Total duration: ', totalDuration.hours.toString().padStart(2, '0') + ':' + totalDuration.minutes.toString().padStart(2, '0') + ':' + totalDuration.seconds.toString().padStart(2, '0'));
 
-		videoCount = playlistData.length;
-
 		return { totalDuration, videoCount };
 	}
-};
+}
