@@ -64,6 +64,10 @@ export default class YoutubeInternal {
 		return finalResult;
 	}
 
+	static formatDuration(totalDuration) {
+		return totalDuration.hours.toString().padStart(2, '0') + ':' + totalDuration.minutes.toString().padStart(2, '0') + ':' + totalDuration.seconds.toString().padStart(2, '0');
+	}
+
 	static async processPlaylistForModule(PLAYLIST_ID, API_KEY) {
 		let videoCount = 0;
 		let totalDuration = { hours: 0, minutes: 0, seconds: 0 };
@@ -102,7 +106,7 @@ export default class YoutubeInternal {
 
 			return acc;
 		}, { hours: 0, minutes: 0, seconds: 0 });
-		console.log('Total duration: ', totalDuration.hours.toString().padStart(2, '0') + ':' + totalDuration.minutes.toString().padStart(2, '0') + ':' + totalDuration.seconds.toString().padStart(2, '0'));
+		console.log('Total duration: ', YoutubeInternal.formatDuration(totalDuration));
 
 		return { totalDuration, videoCount };
 	}
