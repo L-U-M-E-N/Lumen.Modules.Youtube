@@ -6,10 +6,16 @@ export default class Youtube {
 
 		Youtube.interval = setInterval(Youtube.update, 5 * 60 * 1000); // Update every 5 minutes
 
-		Discord.registerCmd('ytstats', Youtube.showStatusOnDiscord);
+		Discord.registerCmd(
+			'ytstats',
+			Youtube.showStatusOnDiscord,
+			{
+				description: 'Get current youtube watchlist status',
+			}
+		);
 	}
 
-	static async showStatusOnDiscord(discordClient, message, words) {
+	static async showStatusOnDiscord(discordClient, interaction) {
 		const content = await YoutubeInternal.processPlaylistForModule(config.PLAYLIST_ID, config.API_KEY);
 
 		if(!content) { return; }
@@ -19,7 +25,10 @@ export default class Youtube {
 			videoCount
 		} = content;
 
-		Discord.sendMessage(`Youtube status: ${videoCount} videos, ${YoutubeInternal.formatDuration(totalDuration)}`);
+		interaction.reply({
+			content: `Youtube status: ${videoCount} videos, ${YoutubeInternal.formatDuration(totalDuration)}`,
+			ephemeral: true
+		})
 	}
 
 	static close() {
