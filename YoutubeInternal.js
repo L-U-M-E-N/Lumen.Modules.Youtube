@@ -85,6 +85,11 @@ export default class YoutubeInternal {
 				return acc;
 			}
 
+			if(item.snippet.title === 'Private video') {
+				console.log(`Warning: video ${item.snippet.resourceId.videoId} has been made private.`);
+				return acc;
+			}
+
 			const duration = parseISO8601Duration(item.videoData.contentDetails.duration);
 
 			acc.hours += duration.days * 24;
