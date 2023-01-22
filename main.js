@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 import fs from 'fs';
 
 import YoutubeInternal from './YoutubeInternal.js';

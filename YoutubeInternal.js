@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 const iso8601DurationRegex = /(-)?P(?:([.,\d]+)Y)?(?:([.,\d]+)M)?(?:([.,\d]+)W)?(?:([.,\d]+)D)?T(?:([.,\d]+)H)?(?:([.,\d]+)M)?(?:([.,\d]+)S)?/;
 function parseISO8601Duration(iso8601Duration) {
 	const matches = iso8601Duration.match(iso8601DurationRegex);
