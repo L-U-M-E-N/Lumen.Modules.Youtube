@@ -12,6 +12,7 @@
 		"module": false,
 		"window": false
 	},
+	"server": true,
     "config": {
         "API_KEY": "string",
         "PLAYLIST_ID": "string"
