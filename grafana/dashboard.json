@@ -5,7 +5,7 @@
       "label": "Lumen",
       "description": "",
       "type": "datasource",
-      "pluginId": "postgres",
+      "pluginId": "grafana-postgresql-datasource",
       "pluginName": "PostgreSQL"
     }
   ],
@@ -15,11 +15,11 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "10.2.2"
+      "version": "10.3.1"
     },
     {
       "type": "datasource",
-      "id": "postgres",
+      "id": "grafana-postgresql-datasource",
       "name": "PostgreSQL",
       "version": "1.0.0"
     },
@@ -74,7 +74,7 @@
   "panels": [
     {
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "${DS_LUMEN}"
       },
       "fieldConfig": {
@@ -130,7 +130,8 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "short",
+          "unitScale": true
         },
         "overrides": [
           {
@@ -182,7 +183,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "${DS_LUMEN}"
           },
           "format": "time_series",
@@ -214,7 +215,7 @@
         },
         {
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "${DS_LUMEN}"
           },
           "format": "time_series",
@@ -246,7 +247,7 @@
         },
         {
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "${DS_LUMEN}"
           },
           "format": "time_series",
@@ -282,7 +283,7 @@
     },
     {
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "${DS_LUMEN}"
       },
       "fieldConfig": {
@@ -337,7 +338,8 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "short",
+          "unitScale": true
         },
         "overrides": [
           {
@@ -355,7 +357,7 @@
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 7,
         "w": 11,
         "x": 10,
         "y": 0
@@ -377,14 +379,15 @@
       "targets": [
         {
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "${DS_LUMEN}"
           },
+          "editorMode": "code",
           "format": "time_series",
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  date AS \"time\",\n  amount - (SELECT amount FROM yt_stats b WHERE (a.date - interval '1 month') > b.date ORDER BY date DESC LIMIT 1) as amountDiff\nFROM yt_stats a\nWHERE\n  $__timeFilter(date)\nORDER BY 1",
+          "rawSql": "SELECT\n  date AS \"time\",\n  amount - (SELECT amount FROM yt_stats b WHERE (a.date - interval '3 month') > b.date ORDER BY date DESC LIMIT 1) as amountDiff\nFROM yt_stats a\nWHERE\n  $__timeFilter(date)\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -396,6 +399,23 @@
               }
             ]
           ],
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
           "table": "yt_stats",
           "timeColumn": "date",
           "timeColumnType": "timestamp",
@@ -409,14 +429,15 @@
         },
         {
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "${DS_LUMEN}"
           },
+          "editorMode": "code",
           "format": "time_series",
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  date AS \"time\",\n  duration - (SELECT duration FROM yt_stats b WHERE (a.date - interval '1 month') > b.date ORDER BY date DESC LIMIT 1) as durationDiff\nFROM yt_stats a\nWHERE\n  $__timeFilter(date)\nORDER BY 1",
+          "rawSql": "SELECT\n  date AS \"time\",\n  duration - (SELECT duration FROM yt_stats b WHERE (a.date - interval '3 month') > b.date ORDER BY date DESC LIMIT 1) as durationDiff\nFROM yt_stats a\nWHERE\n  $__timeFilter(date)\nORDER BY 1",
           "refId": "B",
           "select": [
             [
@@ -428,6 +449,23 @@
               }
             ]
           ],
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
           "table": "yt_stats",
           "timeColumn": "date",
           "timeColumnType": "timestamp",
@@ -440,12 +478,12 @@
           ]
         }
       ],
-      "title": "Differences vs 1 month (or closest to) before",
+      "title": "Differences vs 3 month (or closest to) before",
       "type": "timeseries"
     },
     {
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "${DS_LUMEN}"
       },
       "fieldConfig": {
@@ -462,7 +500,8 @@
                 "value": null
               }
             ]
-          }
+          },
+          "unitScale": true
         },
         "overrides": []
       },
@@ -485,14 +524,15 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.3.1",
       "targets": [
         {
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "${DS_LUMEN}"
           },
           "editorMode": "builder",
@@ -537,7 +577,7 @@
     },
     {
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "${DS_LUMEN}"
       },
       "fieldConfig": {
@@ -555,7 +595,8 @@
               }
             ]
           },
-          "unit": "dateTimeAsLocal"
+          "unit": "dateTimeAsLocal",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -578,14 +619,15 @@
           "fields": "/^max$/",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.3.1",
       "targets": [
         {
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "${DS_LUMEN}"
           },
           "editorMode": "code",
@@ -631,7 +673,7 @@
     },
     {
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "${DS_LUMEN}"
       },
       "gridPos": {
@@ -650,106 +692,12 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.3.1",
       "type": "text"
     },
     {
       "datasource": {
-        "type": "postgres",
-        "uid": "${DS_LUMEN}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "blue",
-                "value": null
-              }
-            ]
-          },
-          "unit": "dthms"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 21,
-        "y": 8
-      },
-      "id": 7,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "/^duration$/",
-          "values": false
-        },
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.2.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "${DS_LUMEN}"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT duration FROM yt_stats ORDER BY date DESC LIMIT 1 ",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [
-                  {
-                    "name": "duration",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 1,
-            "orderBy": {
-              "property": {
-                "name": "date",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "orderByDirection": "DESC"
-          },
-          "table": "yt_stats"
-        }
-      ],
-      "title": "Total time left",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "${DS_LUMEN}"
       },
       "fieldConfig": {
@@ -804,7 +752,8 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "short",
+          "unitScale": true
         },
         "overrides": [
           {
@@ -822,12 +771,12 @@
         ]
       },
       "gridPos": {
-        "h": 11,
+        "h": 7,
         "w": 11,
         "x": 10,
-        "y": 10
+        "y": 7
       },
-      "id": 5,
+      "id": 13,
       "options": {
         "legend": {
           "calcs": [],
@@ -844,14 +793,14 @@
       "targets": [
         {
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "${DS_LUMEN}"
           },
           "format": "time_series",
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  date AS \"time\",\n  amount - (SELECT amount FROM yt_stats b WHERE (a.date - interval '1w') > b.date ORDER BY date DESC LIMIT 1) as amountDiff\nFROM yt_stats a\nWHERE\n  $__timeFilter(date)\nORDER BY 1",
+          "rawSql": "SELECT\n  date AS \"time\",\n  amount - (SELECT amount FROM yt_stats b WHERE (a.date - interval '1 month') > b.date ORDER BY date DESC LIMIT 1) as amountDiff\nFROM yt_stats a\nWHERE\n  $__timeFilter(date)\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -876,14 +825,14 @@
         },
         {
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "${DS_LUMEN}"
           },
           "format": "time_series",
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  date AS \"time\",\n  duration - (SELECT duration FROM yt_stats b WHERE (a.date - interval '1w') > b.date ORDER BY date DESC LIMIT 1) as durationDiff\nFROM yt_stats a\nWHERE\n  $__timeFilter(date)\nORDER BY 1",
+          "rawSql": "SELECT\n  date AS \"time\",\n  duration - (SELECT duration FROM yt_stats b WHERE (a.date - interval '1 month') > b.date ORDER BY date DESC LIMIT 1) as durationDiff\nFROM yt_stats a\nWHERE\n  $__timeFilter(date)\nORDER BY 1",
           "refId": "B",
           "select": [
             [
@@ -907,12 +856,12 @@
           ]
         }
       ],
-      "title": "Differences vs 7d (or closest to) before",
+      "title": "Differences vs 1 month (or closest to) before",
       "type": "timeseries"
     },
     {
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "${DS_LUMEN}"
       },
       "fieldConfig": {
@@ -930,7 +879,104 @@
               }
             ]
           },
-          "unit": "dateTimeAsLocal"
+          "unit": "dthms",
+          "unitScale": true
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 21,
+        "y": 8
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^duration$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_LUMEN}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT duration FROM yt_stats ORDER BY date DESC LIMIT 1 ",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "duration",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 1,
+            "orderBy": {
+              "property": {
+                "name": "date",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "orderByDirection": "DESC"
+          },
+          "table": "yt_stats"
+        }
+      ],
+      "title": "Total time left",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_LUMEN}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "dateTimeAsLocal",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -953,14 +999,15 @@
           "fields": "/^max$/",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.3.1",
       "targets": [
         {
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "${DS_LUMEN}"
           },
           "editorMode": "code",
@@ -1006,7 +1053,171 @@
     },
     {
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
+        "uid": "${DS_LUMEN}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": true,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "transparent",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short",
+          "unitScale": true
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "durationdiff"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dthms"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 10,
+        "y": 14
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.1.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_LUMEN}"
+          },
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date AS \"time\",\n  amount - (SELECT amount FROM yt_stats b WHERE (a.date - interval '1w') > b.date ORDER BY date DESC LIMIT 1) as amountDiff\nFROM yt_stats a\nWHERE\n  $__timeFilter(date)\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "amount"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "yt_stats",
+          "timeColumn": "date",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "${DS_LUMEN}"
+          },
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  date AS \"time\",\n  duration - (SELECT duration FROM yt_stats b WHERE (a.date - interval '1w') > b.date ORDER BY date DESC LIMIT 1) as durationDiff\nFROM yt_stats a\nWHERE\n  $__timeFilter(date)\nORDER BY 1",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "duration"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "yt_stats",
+          "timeColumn": "date",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Differences vs 7d (or closest to) before",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
         "uid": "${DS_LUMEN}"
       },
       "gridPos": {
@@ -1025,12 +1236,12 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.3.1",
       "type": "text"
     },
     {
       "datasource": {
-        "type": "postgres",
+        "type": "grafana-postgresql-datasource",
         "uid": "${DS_LUMEN}"
       },
       "fieldConfig": {
@@ -1048,7 +1259,8 @@
               }
             ]
           },
-          "unit": "dthms"
+          "unit": "dthms",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -1071,14 +1283,15 @@
           "fields": "/^\\?column\\?$/",
           "values": false
         },
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.3.1",
       "targets": [
         {
           "datasource": {
-            "type": "postgres",
+            "type": "grafana-postgresql-datasource",
             "uid": "${DS_LUMEN}"
           },
           "editorMode": "code",
@@ -1124,7 +1337,7 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 38,
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": []
@@ -1150,6 +1363,6 @@
   "timezone": "",
   "title": "Youtube stats",
   "uid": "Vnv9NfJnk",
-  "version": 5,
+  "version": 2,
   "weekStart": ""
 }
