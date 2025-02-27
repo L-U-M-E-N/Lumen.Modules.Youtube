@@ -1,0 +1,74 @@
+name: .NET
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  SONAR_KEY: lumen-module-youtube
+  SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  MODULE_NAME: Lumen.Modules.Youtube
+  RELEASE_FILES_LOCATION: Lumen.Modules.Youtube.Module/bin/Release/net9.0/*.dll
+  CSPROJ: Lumen.Modules.Youtube.Module/Lumen.Modules.Youtube.Module.csproj
+  NUGET_SERVER_ADRESS: https://api.nuget.org/v3/index.json
+  NUGET_SERVER_KEY: ${{ secrets.NUGET_ORG_KEY }}
+  RUN_TESTS: 'false'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Setup sonarscanner
+      run: |
+        dotnet tool install --global dotnet-sonarscanner
+
+    - name: Start sonarscanner
+      run: dotnet sonarscanner begin /k:"${{ env.SONAR_KEY }}" /d:sonar.host.url="${{ env.SONAR_HOST_URL }}" /d:sonar.token="${{ env.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.coverage.exclusions="**Test*.cs" /d:sonar.branch.name="${{github.ref_name}}"
+
+    - name: Set Version in csproj
+      if: startsWith(github.event.ref, 'refs/tags/')
+      run: sed -i 's/>1.0.0</>${{github.ref_name}}</g' ${{ env.CSPROJ }}
+
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      if: env.RUN_TESTS == 'true'
+      run: |
+        dotnet tool install --global dotnet-coverage
+        dotnet-coverage collect 'dotnet test --no-build --verbosity normal' -f xml  -o 'coverage.xml'
+
+    - name: End sonarscanner
+      run: dotnet sonarscanner end /d:sonar.token="${{ env.SONAR_TOKEN }}"
+
+    - name: Zip release files
+      if: startsWith(github.event.ref, 'refs/tags/')
+      run: |
+        sudo apt update
+        sudo apt install zip
+        dotnet build -c Release
+        mkdir out/
+        cp ${{ env.RELEASE_FILES_LOCATION }} out/
+        zip -r ${{ env.MODULE_NAME }}-${{github.ref_name}}.zip out/
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.event.ref, 'refs/tags/')
+      with:
+        files: ${{ env.MODULE_NAME }}-${{github.ref_name}}.zip
