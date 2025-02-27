@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumen.Modules.Youtube.Data"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumen.Modules.Youtube.Common", "Lumen.Modules.Youtube.Common\Lumen.Modules.Youtube.Common.csproj", "{691BD1E2-431F-4BA7-BCBD-EAEE7131F170}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumen.Modules.Youtube.ConsoleApp", "Lumen.Modules.Youtube.ConsoleApp\Lumen.Modules.Youtube.ConsoleApp.csproj", "{663A9005-6769-4CE7-84AB-D53FA6162505}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumen.Modules.Youtube.Tests", "Lumen.Modules.Youtube.Tests\Lumen.Modules.Youtube.Tests.csproj", "{8E7C0C8B-A8F1-494C-AFDA-94692B038AEE}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{691BD1E2-431F-4BA7-BCBD-EAEE7131F170}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{691BD1E2-431F-4BA7-BCBD-EAEE7131F170}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{691BD1E2-431F-4BA7-BCBD-EAEE7131F170}.Release|Any CPU.Build.0 = Release|Any CPU
-		{663A9005-6769-4CE7-84AB-D53FA6162505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{663A9005-6769-4CE7-84AB-D53FA6162505}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{663A9005-6769-4CE7-84AB-D53FA6162505}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{663A9005-6769-4CE7-84AB-D53FA6162505}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8E7C0C8B-A8F1-494C-AFDA-94692B038AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8E7C0C8B-A8F1-494C-AFDA-94692B038AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E7C0C8B-A8F1-494C-AFDA-94692B038AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
