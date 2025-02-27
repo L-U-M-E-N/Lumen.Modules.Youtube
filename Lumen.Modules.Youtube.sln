@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumen.Modules.Youtube.Module", "Lumen.Modules.Youtube.Module\Lumen.Modules.Youtube.Module.csproj", "{BCE779D8-DEA1-4AA8-810E-479E716469B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumen.Modules.Youtube.Data", "Lumen.Modules.Youtube.Data\Lumen.Modules.Youtube.Data.csproj", "{82A4AC1B-21CD-4C0B-B0E5-0B86DFB3D3EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumen.Modules.Youtube.Common", "Lumen.Modules.Youtube.Common\Lumen.Modules.Youtube.Common.csproj", "{691BD1E2-431F-4BA7-BCBD-EAEE7131F170}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumen.Modules.Youtube.ConsoleApp", "Lumen.Modules.Youtube.ConsoleApp\Lumen.Modules.Youtube.ConsoleApp.csproj", "{663A9005-6769-4CE7-84AB-D53FA6162505}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lumen.Modules.Youtube.Tests", "Lumen.Modules.Youtube.Tests\Lumen.Modules.Youtube.Tests.csproj", "{8E7C0C8B-A8F1-494C-AFDA-94692B038AEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BCE779D8-DEA1-4AA8-810E-479E716469B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCE779D8-DEA1-4AA8-810E-479E716469B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCE779D8-DEA1-4AA8-810E-479E716469B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCE779D8-DEA1-4AA8-810E-479E716469B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82A4AC1B-21CD-4C0B-B0E5-0B86DFB3D3EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82A4AC1B-21CD-4C0B-B0E5-0B86DFB3D3EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82A4AC1B-21CD-4C0B-B0E5-0B86DFB3D3EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82A4AC1B-21CD-4C0B-B0E5-0B86DFB3D3EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{691BD1E2-431F-4BA7-BCBD-EAEE7131F170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{691BD1E2-431F-4BA7-BCBD-EAEE7131F170}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{691BD1E2-431F-4BA7-BCBD-EAEE7131F170}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{691BD1E2-431F-4BA7-BCBD-EAEE7131F170}.Release|Any CPU.Build.0 = Release|Any CPU
+		{663A9005-6769-4CE7-84AB-D53FA6162505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{663A9005-6769-4CE7-84AB-D53FA6162505}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{663A9005-6769-4CE7-84AB-D53FA6162505}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{663A9005-6769-4CE7-84AB-D53FA6162505}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E7C0C8B-A8F1-494C-AFDA-94692B038AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E7C0C8B-A8F1-494C-AFDA-94692B038AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E7C0C8B-A8F1-494C-AFDA-94692B038AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E7C0C8B-A8F1-494C-AFDA-94692B038AEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
