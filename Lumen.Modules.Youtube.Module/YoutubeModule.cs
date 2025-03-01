@@ -6,7 +6,7 @@ using Lumen.Modules.Youtube.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lumen.Modules.Youtube.Module {
-    public class YoutubeModule(LumenModuleRunsOnFlag runsOn, IEnumerable<ConfigEntry> configEntries, ILogger<LumenModuleBase> logger, IServiceProvider provider) : LumenModuleBase(runsOn, configEntries, logger) {
+    public class YoutubeModule(IEnumerable<ConfigEntry> configEntries, ILogger<LumenModuleBase> logger, IServiceProvider provider) : LumenModuleBase(configEntries, logger, provider) {
         public const string PLAYLIST_ID = nameof(PLAYLIST_ID);
         public const string API_KEY = nameof(API_KEY);
 
@@ -16,18 +16,25 @@ namespace Lumen.Modules.Youtube.Module {
         }
 
         public override async Task RunAsync(LumenModuleRunsOnFlag currentEnv) {
-            var (amount, duration) = await YoutubeAPIHelper.ComputeWatchlistStatus(GetAPIKey(), GetPlaylistId());
+            try {
+                logger.LogTrace($"[{nameof(YoutubeModule)}] Running tasks ...");
+                var (amount, duration) = await YoutubeAPIHelper.ComputeWatchlistStatus(GetAPIKey(), GetPlaylistId());
 
-            var timespan = TimeSpan.FromSeconds(duration);
-            Console.WriteLine($"{DateTime.Now} - Stats: {amount} videos, {(int)timespan.TotalHours}:{timespan:mm\\:ss}");
+                var timespan = TimeSpan.FromSeconds(duration);
+                logger.LogTrace($"[{nameof(YoutubeModule)}] {DateTime.Now} - Stats: {amount} videos, {(int)timespan.TotalHours}:{timespan:mm\\:ss}");
 
-            switch (currentEnv) {
-                case LumenModuleRunsOnFlag.API:
-                    await RunAPIAsync(amount, duration);
-                    break;
-                case LumenModuleRunsOnFlag.UI:
-                    await RunUIAsync(amount, duration);
-                    break;
+                switch (currentEnv) {
+                    case LumenModuleRunsOnFlag.API:
+                        await RunAPIAsync(amount, duration);
+                        break;
+                    case LumenModuleRunsOnFlag.UI:
+                        await RunUIAsync(amount, duration);
+                        break;
+                }
+
+                logger.LogTrace($"[{nameof(YoutubeModule)}] Running tasks ... Done!");
+            } catch (Exception ex) {
+                logger.LogError(ex, $"[{nameof(YoutubeModule)}] Error when running tasks.");
             }
         }
 
@@ -49,26 +56,30 @@ namespace Lumen.Modules.Youtube.Module {
             return configEntry.ConfigValue;
         }
 
-        public async Task RunUIAsync(int amount, int duration) {
+        private async Task RunUIAsync(int amount, int duration) {
             // TODO
         }
 
-        public async Task RunAPIAsync(int amount, int duration) {
+        private async Task RunAPIAsync(int amount, int duration) {
             using var scope = provider.CreateScope();
             var context = provider.GetRequiredService<YoutubeContext>();
 
-            context.YoutubeWatchlist.Add(new YoutubeWatchlistPointInTime {
-                Time = DateTime.UtcNow,
-                AmountVideos = amount,
-                SecondsDuration = duration
-            });
-            await context.SaveChangesAsync();
+            var lastEntry = context.YoutubeWatchlist.OrderBy(x => x.Time).LastOrDefault();
+            if (lastEntry is null || lastEntry.AmountVideos != amount || lastEntry.SecondsDuration != duration) {
+                logger.LogTrace($"[{nameof(YoutubeModule)}] Saving current watchlist status.");
+                context.YoutubeWatchlist.Add(new YoutubeWatchlistPointInTime {
+                    Time = DateTime.UtcNow,
+                    AmountVideos = amount,
+                    SecondsDuration = duration
+                });
+                await context.SaveChangesAsync();
+            }
         }
 
         public override bool ShouldRunNow(LumenModuleRunsOnFlag currentEnv) {
             return currentEnv switch {
                 LumenModuleRunsOnFlag.UI => DateTime.UtcNow.Second == 0 && DateTime.UtcNow.Minute == 27,
-                LumenModuleRunsOnFlag.API => true, // DateTime.UtcNow.Second == 0 && DateTime.UtcNow.Minute % 5 == 0,
+                LumenModuleRunsOnFlag.API => DateTime.UtcNow.Second == 0 && DateTime.UtcNow.Minute % 5 == 0,
                 _ => false,
             };
         }
