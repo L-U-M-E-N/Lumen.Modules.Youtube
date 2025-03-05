@@ -19,8 +19,10 @@ namespace Lumen.Modules.Youtube.Business {
             do {
                 response = await GetPlaylistPageItemsAsync(service, playListId, nextPageToken);
 
-                amount += response.Items.Count;
-                totalDuration += (await GetVideosAccumulatedDurationAsync(service, response.Items.Select(x => x.Snippet.ResourceId.VideoId).ToList()));
+                var (count, duration) = await GetVideoStatsAsync(service, response.Items.Select(x => x.Snippet.ResourceId.VideoId).ToList());
+
+                amount += count;
+                totalDuration += duration;
 
                 nextPageToken = response.NextPageToken;
 
@@ -29,12 +31,32 @@ namespace Lumen.Modules.Youtube.Business {
             return (amount, totalDuration);
         }
 
-        private static async Task<int> GetVideosAccumulatedDurationAsync(YouTubeService service, List<string> videoIds) {
+        private const string DELETED_VIDEO = "Deleted video";
+        private const string PRIVATE_VIDEO = "Private video";
+
+        private static async Task<(int, int)> GetVideoStatsAsync(YouTubeService service, List<string> videoIds) {
             var query = service.Videos.List(new List<string> { "snippet", "contentDetails", "statistics" });
             query.Id = videoIds;
             var response = await query.ExecuteAsync();
 
-            return (int)response.Items.Select(x => XmlConvert.ToTimeSpan(x.ContentDetails.Duration)).Sum(x => x.TotalSeconds);
+            // Show deleted/private videos in logs
+            var deletedVideos = response.Items.Where(x => x.Snippet.Title == DELETED_VIDEO);
+            if (deletedVideos.Any()) {
+                Console.WriteLine(DELETED_VIDEO + ": " + string.Join(",", deletedVideos.Select(x => x.Id)));
+            }
+            var privateVideos = response.Items.Where(x => x.Snippet.Title == PRIVATE_VIDEO);
+            if (privateVideos.Any()) {
+                Console.WriteLine(PRIVATE_VIDEO + ": " + string.Join(",", privateVideos.Select(x => x.Id)));
+            }
+
+            // Filter out deleted/private videos
+            var filteredVideos = response.Items.Where(x => x.Snippet.Title != DELETED_VIDEO && x.Snippet.Title != PRIVATE_VIDEO);
+
+            var duration = (int)filteredVideos.Select(x => XmlConvert.ToTimeSpan(x.ContentDetails.Duration)).Sum(x => x.TotalSeconds);
+            return (
+                filteredVideos.Count(),
+                duration
+            );
         }
 
         private static Task<PlaylistItemListResponse> GetPlaylistPageItemsAsync(YouTubeService service, string playListId, string? nextPageToken) {
