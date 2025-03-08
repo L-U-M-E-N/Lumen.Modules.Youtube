@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    uses: L-U-M-E-N/reusable-workflow/.github/workflows/build-module.yaml@6.0.0
+    uses: L-U-M-E-N/reusable-workflow/.github/workflows/build-module.yaml@6.0.1
     with:
       SONAR_KEY: lumen-module-youtube
       MODULE_NAME: Lumen.Modules.Youtube
