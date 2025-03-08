@@ -1,5 +1,5 @@
 ﻿using Lumen.Modules.Sdk;
-using Lumen.Modules.Youtube.Business;
+using Lumen.Modules.Youtube.Common;
 using Lumen.Modules.Youtube.Common.Models;
 using Lumen.Modules.Youtube.Data;
 
@@ -18,7 +18,7 @@ namespace Lumen.Modules.Youtube.Module {
         public override async Task RunAsync(LumenModuleRunsOnFlag currentEnv) {
             try {
                 logger.LogTrace($"[{nameof(YoutubeModule)}] Running tasks ...");
-                var (amount, duration) = await YoutubeAPIHelper.ComputeWatchlistStatus(GetAPIKey(), GetPlaylistId());
+                var (amount, duration) = await YoutubeApiHelper.ComputeWatchlistStatusAsync(GetAPIKey(), GetPlaylistId());
 
                 var timespan = TimeSpan.FromSeconds(duration);
                 logger.LogTrace($"[{nameof(YoutubeModule)}] {DateTime.Now} - Stats: {amount} videos, {(int)timespan.TotalHours}:{timespan:mm\\:ss}");

@@ -1,4 +1,4 @@
-﻿using Lumen.Modules.Youtube.Business;
+﻿using Lumen.Modules.Youtube.Common;
 
 using Microsoft.Extensions.Configuration;
 
@@ -18,7 +18,7 @@ namespace Lumen.Modules.Youtube.Tests {
 
         [Fact]
         public async Task ComputeWatchlistStatus_Ok() {
-            var (amount, totalDuration) = await YoutubeAPIHelper.ComputeWatchlistStatus(API_KEY, PLAYLIST_ID);
+            var (amount, totalDuration) = await YoutubeApiHelper.ComputeWatchlistStatusAsync(API_KEY, PLAYLIST_ID);
 
             Assert.True(amount > 0);
             Assert.True(totalDuration > 0);
