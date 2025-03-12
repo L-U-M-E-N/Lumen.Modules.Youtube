@@ -6,7 +6,7 @@ namespace Lumen.Modules.Youtube.Data {
     public class YoutubeContext : DbContext {
         public const string SCHEMA_NAME = "youtubewatchlist";
 
-        public YoutubeContext(DbContextOptions options) : base(options) {
+        public YoutubeContext(DbContextOptions<YoutubeContext> options) : base(options) {
         }
 
         public DbSet<YoutubeWatchlistPointInTime> YoutubeWatchlist { get; set; } = null!;
