@@ -15,7 +15,7 @@ namespace Lumen.Modules.Youtube.Module {
             return Task.CompletedTask;
         }
 
-        public override async Task RunAsync(LumenModuleRunsOnFlag currentEnv) {
+        public override async Task RunAsync(LumenModuleRunsOnFlag currentEnv, DateTime date) {
             try {
                 logger.LogTrace($"[{nameof(YoutubeModule)}] Running tasks ...");
                 var (amount, duration) = await YoutubeApiHelper.ComputeWatchlistStatusAsync(GetAPIKey(), GetPlaylistId());
@@ -25,7 +25,7 @@ namespace Lumen.Modules.Youtube.Module {
 
                 switch (currentEnv) {
                     case LumenModuleRunsOnFlag.API:
-                        await RunAPIAsync(amount, duration);
+                        await RunAPIAsync(amount, duration, date);
                         break;
                     case LumenModuleRunsOnFlag.UI:
                         await RunUIAsync(amount, duration);
@@ -60,7 +60,7 @@ namespace Lumen.Modules.Youtube.Module {
             // TODO
         }
 
-        private async Task RunAPIAsync(int amount, int duration) {
+        private async Task RunAPIAsync(int amount, int duration, DateTime date) {
             using var scope = provider.CreateScope();
             var context = provider.GetRequiredService<YoutubeContext>();
 
@@ -68,7 +68,7 @@ namespace Lumen.Modules.Youtube.Module {
             if (lastEntry is null || lastEntry.AmountVideos != amount || lastEntry.SecondsDuration != duration) {
                 logger.LogTrace($"[{nameof(YoutubeModule)}] Saving current watchlist status.");
                 context.YoutubeWatchlist.Add(new YoutubeWatchlistPointInTime {
-                    Time = DateTime.UtcNow,
+                    Time = date,
                     AmountVideos = amount,
                     SecondsDuration = duration
                 });
@@ -76,10 +76,10 @@ namespace Lumen.Modules.Youtube.Module {
             }
         }
 
-        public override bool ShouldRunNow(LumenModuleRunsOnFlag currentEnv) {
+        public override bool ShouldRunNow(LumenModuleRunsOnFlag currentEnv, DateTime date) {
             return currentEnv switch {
-                LumenModuleRunsOnFlag.UI => DateTime.UtcNow.Second == 0 && DateTime.UtcNow.Minute == 27,
-                LumenModuleRunsOnFlag.API => DateTime.UtcNow.Second == 0 && DateTime.UtcNow.Minute % 5 == 0,
+                LumenModuleRunsOnFlag.UI => date.Second == 0 && date.Minute == 27,
+                LumenModuleRunsOnFlag.API => date.Second == 0 && date.Minute % 5 == 0,
                 _ => false,
             };
         }
