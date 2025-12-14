@@ -7,11 +7,11 @@ on:
 
 jobs:
   build:
-    uses: L-U-M-E-N/reusable-workflow/.github/workflows/build-module.yaml@6.0.1
+    uses: L-U-M-E-N/reusable-workflow/.github/workflows/build-module.yaml@6.1.0
     with:
       SONAR_KEY: lumen-module-youtube
       MODULE_NAME: Lumen.Modules.Youtube
-      RELEASE_FILES_LOCATION: Lumen.Modules.Youtube.Module/bin/Release/net9.0/*.dll
+      RELEASE_FILES_LOCATION: Lumen.Modules.Youtube.Module/bin/Release/net10.0/*.dll
       CSPROJ: Lumen.Modules.Youtube.Module/Lumen.Modules.Youtube.Module.csproj
       RUN_TESTS: 'false'
 
